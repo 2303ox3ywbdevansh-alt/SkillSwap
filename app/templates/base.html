@@ -10,7 +10,7 @@
 </head>
 <body>
   <header class="topbar"><a class="brand" href="{{ url_for('main.index') }}"><span class="brand-mark">S</span> Skill<span>Swap</span></a>
-    <nav class="navlinks"><a href="{{ url_for('main.dashboard') if current_user.is_authenticated else url_for('main.index') }}">Dashboard</a>{% if current_user.is_authenticated %}<a href="{{ url_for('matching.index') }}">Explore matches</a><a href="{{ url_for('main.profile', username=current_user.username) }}">Profile</a>{% endif %}</nav>
+    <nav class="navlinks"><a href="{{ url_for('main.dashboard') if current_user.is_authenticated else url_for('main.index') }}">Dashboard</a><a href="{{ url_for('main.demo_profiles') }}">Demo profiles</a>{% if current_user.is_authenticated %}<a href="{{ url_for('matching.index') }}">Explore matches</a><a href="{{ url_for('main.profile', username=current_user.username) }}">Profile</a>{% endif %}</nav>
     <div class="nav-actions">{% if current_user.is_authenticated %}<span class="nav-credit">◈ {{ current_user.credits }} credits</span><form action="{{ url_for('auth.logout') }}" method="post"><input type="hidden" name="csrf_token" value="{{ csrf_token() }}"><button class="button button-quiet" type="submit">Sign out</button></form>{% else %}<a class="button button-quiet" href="{{ url_for('auth.login') }}">Log in</a><a class="button button-primary" href="{{ url_for('auth.register') }}">Get started</a>{% endif %}</div>
   </header>
   <main class="page">{% with messages = get_flashed_messages(with_categories=true) %}{% if messages %}<div class="flash-stack">{% for category, message in messages %}<div class="flash {{ category }}">{{ message }}</div>{% endfor %}</div>{% endif %}{% endwith %}{% block content %}{% endblock %}</main>

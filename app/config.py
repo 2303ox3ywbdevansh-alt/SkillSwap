@@ -24,3 +24,4 @@ class Config:
     MAX_CONTENT_LENGTH = 5 * 1024 * 1024
     AI_MODEL_NAME = os.getenv("AI_MODEL_NAME", "sentence-transformers/all-MiniLM-L6-v2")
     MATCHING_USE_EMBEDDINGS = os.getenv("MATCHING_USE_EMBEDDINGS", "true").lower() == "true"
+    ENABLE_DEMO_SEED = os.getenv("ENABLE_DEMO_SEED", "false").lower() == "true"

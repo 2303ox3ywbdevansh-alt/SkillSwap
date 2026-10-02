@@ -34,6 +34,17 @@ flask run
 
 Open http://127.0.0.1:5000. For embeddings, the first match request downloads the configured model; install and first-run download require internet access. Set `MATCHING_USE_EMBEDDINGS=false` to use the explicitly labeled exact skill-overlap fallback.
 
+### Add local demo profiles
+
+Set `ENABLE_DEMO_SEED=true` in your local `.env`, then run:
+
+```powershell
+$env:FLASK_APP = "run.py"
+flask seed-demo
+```
+
+This adds three fictional, clearly labeled sample members with reciprocal Python/Flask and UI/Figma skill interests. View them at `/demo-profiles`; the seed command is disabled in production and safe to re-run. Keep `ENABLE_DEMO_SEED=false` on Railway.
+
 ## Run with Docker
 
 Copy `.env.example` to `.env`, set a strong secret, then run:

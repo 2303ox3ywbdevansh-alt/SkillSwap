@@ -19,10 +19,12 @@ def create_app(config_class=Config):
     from .main.routes import main_bp
     from .matching.routes import matching_bp
     from .scheduling.routes import scheduling_bp
+    from .seed import seed_demo
     app.register_blueprint(auth_bp)
     app.register_blueprint(main_bp)
     app.register_blueprint(matching_bp)
     app.register_blueprint(scheduling_bp)
+    app.cli.add_command(seed_demo)
 
     @app.get("/health")
     def health():

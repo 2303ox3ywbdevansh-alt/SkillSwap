@@ -26,3 +26,9 @@ def profile(username):
     user = User.query.filter_by(username=username).first_or_404()
     reviews = Review.query.filter_by(reviewee_id=user.id).order_by(Review.created_at.desc()).limit(8).all()
     return render_template("profile.html", profile=user, reviews=reviews)
+
+
+@main_bp.route("/demo-profiles")
+def demo_profiles():
+    profiles = [user for user in User.query.order_by(User.name.asc()).all() if user.username.startswith("demo_")]
+    return render_template("demo_profiles.html", profiles=profiles)
