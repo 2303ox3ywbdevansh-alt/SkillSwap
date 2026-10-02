@@ -28,10 +28,14 @@ DEMO_PROFILES = [
 
 
 @click.command("seed-demo")
-def seed_demo():
-    """Create clearly labeled demo profiles for local development."""
-    if not current_app.config.get("ENABLE_DEMO_SEED") or current_app.config.get("SESSION_COOKIE_SECURE"):
-        raise click.ClickException("Demo seed is disabled. Enable ENABLE_DEMO_SEED=true in a local development .env first.")
+@click.option("--production", is_flag=True, help="Explicitly allow seeding the connected production database.")
+def seed_demo(production):
+    """Create clearly labeled demo profiles in the configured database."""
+    is_production = current_app.config.get("SESSION_COOKIE_SECURE")
+    if is_production and not production:
+        raise click.ClickException("On production, pass --production explicitly to confirm the target database.")
+    if not is_production and not current_app.config.get("ENABLE_DEMO_SEED"):
+        raise click.ClickException("Demo seed is disabled. Set ENABLE_DEMO_SEED=true in your local .env first.")
 
     created = 0
     for data in DEMO_PROFILES:

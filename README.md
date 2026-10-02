@@ -43,7 +43,9 @@ $env:FLASK_APP = "run.py"
 flask seed-demo
 ```
 
-This adds three fictional, clearly labeled sample members with reciprocal Python/Flask and UI/Figma skill interests. View them at `/demo-profiles`; the seed command is disabled in production and safe to re-run. Keep `ENABLE_DEMO_SEED=false` on Railway.
+This adds three fictional, clearly labeled sample members with reciprocal Python/Flask and UI/Figma skill interests. View them at `/demo-profiles`. The command is safe to re-run; keep `ENABLE_DEMO_SEED=false` on Railway.
+
+To add the sample profiles to Railway's separate production database after deploying the latest code, link the Railway CLI to the web service and run `railway ssh -- flask seed-demo --production`. This writes only the labeled demo users and their skill links; it does not create sessions or reviews.
 
 ## Run with Docker
 
