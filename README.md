@@ -8,6 +8,7 @@ SkillSwap is a Flask application for peer-to-peer skill exchange: members list s
 - Skill catalog and teach/want skill lists
 - Configurable sentence-transformers matching with a clearly separate skill-overlap fallback
 - Session requests, participant conflict checks, teacher acceptance, completion, and a credit ledger
+- Scheduled session rooms with browser-based WebRTC video/audio, authenticated Socket.IO signaling, microphone/camera controls, and participant-only access
 - PostgreSQL/SQLite configuration, migrations, CSRF protection, password hashing, Docker Compose, Redis, and Celery worker scaffold
 
 Chat, password-reset email delivery, availability calendars, reviews submission, assignments, learning roadmaps, workshops, and admin tooling are planned follow-on modules. The code-execution feature is intentionally not exposed until a separate sandbox runner is implemented.
@@ -29,7 +30,7 @@ $env:FLASK_APP = "run.py"
 flask db init
 flask db migrate -m "initial schema"
 flask db upgrade
-flask run
+python run.py
 ```
 
 Open http://127.0.0.1:5000. For embeddings, the first match request downloads the configured model; install and first-run download require internet access. Set `MATCHING_USE_EMBEDDINGS=false` to use the explicitly labeled exact skill-overlap fallback.
@@ -86,8 +87,14 @@ Once the app is working, enable `MATCHING_USE_EMBEDDINGS=true` if you want seman
 
 Railway's current Flask guide supports deployment from a GitHub repository or CLI and uses Gunicorn as the start process. PostgreSQL connection variables are available from the database service. See [Railway Flask guide](https://docs.railway.com/guides/flask) and [PostgreSQL docs](https://docs.railway.com/databases/postgresql).
 
+## Video calls
+
+After a teacher accepts a session, both participants get a **Join call** button on their dashboard. The room uses browser WebRTC for the media stream and authenticated Flask-SocketIO events for offer/answer/ICE signaling. It requires HTTPS (Railway's generated domain provides it) or localhost and the browser must grant camera/microphone permission. The initial build uses a public STUN server and does not include a TURN relay; some restrictive networks may need a self-hosted or configured TURN service for reliable connectivity. Socket.IO uses in-process signaling for a single web instance; set `SOCKETIO_REDIS_URL` to a Redis service before running multiple web instances.
 ## Production notes
 
 Set `FLASK_ENV=production`, use a strong secret, HTTPS, managed PostgreSQL and Redis, and configure backups and monitoring. The Compose database credentials are for local development only. Restrict CORS and trusted hosts at deployment. The initial Socket.IO setup supports development; configure its Redis message queue for multi-process production scaling.
 
 Time credits follow a simple ledger: one credit per rounded session hour. The learner needs enough credits when the session is completed. Production rollout should add transactional row locking around balance checks and a reviewable dispute/refund workflow.
+
+
+

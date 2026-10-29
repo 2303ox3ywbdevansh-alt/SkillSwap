@@ -1,5 +1,5 @@
 from datetime import datetime
-from flask import Blueprint, flash, redirect, request, url_for
+from flask import Blueprint, abort, flash, redirect, render_template, request, url_for
 from flask_login import current_user, login_required
 from ..extensions import db
 from ..models import User, Skill, Session, CreditTransaction, UserSkill
@@ -69,3 +69,14 @@ def complete(session_id):
     db.session.commit()
     flash(f"Session completed. {hours} time credit(s) transferred.", "success")
     return redirect(url_for("main.dashboard"))
+
+@scheduling_bp.route("/<int:session_id>/room")
+@login_required
+def video_room(session_id):
+    booked_session = db.session.get(Session, session_id)
+    if not booked_session or current_user.id not in {booked_session.teacher_id, booked_session.learner_id}:
+        abort(404)
+    if booked_session.status != "scheduled":
+        flash("The video room is available after the teacher accepts the session.", "info")
+        return redirect(url_for("main.dashboard"))
+    return render_template("session_room.html", booked_session=booked_session)

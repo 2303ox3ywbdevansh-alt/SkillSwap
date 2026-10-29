@@ -12,7 +12,7 @@ def create_app(config_class=Config):
     migrate.init_app(app, db)
     login_manager.init_app(app)
     csrf.init_app(app)
-    socketio.init_app(app, message_queue=app.config["REDIS_URL"] if os.getenv("FLASK_ENV") == "production" else None)
+    socketio.init_app(app, message_queue=os.getenv("SOCKETIO_REDIS_URL") or None)
 
     from . import models  # noqa: F401
     from .auth.routes import auth_bp
@@ -20,6 +20,7 @@ def create_app(config_class=Config):
     from .matching.routes import matching_bp
     from .scheduling.routes import scheduling_bp
     from .seed import seed_demo
+    from .video import socket_events  # noqa: F401
     app.register_blueprint(auth_bp)
     app.register_blueprint(main_bp)
     app.register_blueprint(matching_bp)
@@ -44,3 +45,6 @@ def create_app(config_class=Config):
         return render_template("error.html", code=500, message="Something went wrong. Please try again."), 500
 
     return app
+
+
+

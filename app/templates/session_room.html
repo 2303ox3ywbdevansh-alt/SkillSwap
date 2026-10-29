@@ -1,0 +1,19 @@
+{% extends 'base.html' %}
+{% block title %}Session room{% endblock %}
+{% block content %}
+<section class="video-room panel" id="video-room" data-session-id="{{ booked_session.id }}" data-user-id="{{ current_user.id }}">
+  <div class="video-room-head">
+    <div><div class="eyebrow">SKILLSWAP SESSION ROOM</div><h1>{{ booked_session.skill.name }} session</h1><p>With {{ booked_session.teacher.name if current_user.id == booked_session.learner_id else booked_session.learner.name }} · {{ booked_session.starts_at.strftime('%b %d, %I:%M %p') }}</p></div>
+    <a class="button button-quiet" href="{{ url_for('main.dashboard') }}">← Dashboard</a>
+  </div>
+  <div class="call-status" id="call-status" role="status">Connecting to the private session room…</div>
+  <div class="video-grid">
+    <div class="video-tile remote-tile"><video id="remote-video" autoplay playsinline></video><div class="video-placeholder" id="remote-placeholder"><span>◉</span><b>Waiting for your partner</b><small>They can join this call from their dashboard.</small></div><span class="video-name">{{ booked_session.teacher.name if current_user.id == booked_session.learner_id else booked_session.learner.name }}</span></div>
+    <div class="video-tile local-tile"><video id="local-video" autoplay playsinline muted></video><div class="video-placeholder" id="local-placeholder"><span>◌</span><b>Your camera is off</b><small>Join the call to enable camera and microphone.</small></div><span class="video-name">You</span></div>
+  </div>
+  <div class="video-controls"><button class="button button-primary" id="join-call" type="button">Join call</button><button class="button button-outline" id="toggle-mic" type="button" disabled>Mute mic</button><button class="button button-outline" id="toggle-camera" type="button" disabled>Turn camera off</button><button class="button button-danger" id="leave-call" type="button" disabled>Leave call</button></div>
+  <p class="video-note">Your browser will ask for camera and microphone access. Calls connect directly between participants; use the browser’s permission controls if you need to revoke access.</p>
+</section>
+<script src="/socket.io/socket.io.js"></script>
+<script src="{{ url_for('static', filename='js/video-room.js') }}" defer></script>
+{% endblock %}
