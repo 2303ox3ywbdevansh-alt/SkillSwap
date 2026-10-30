@@ -14,6 +14,7 @@
   <div class="video-controls"><button class="button button-primary" id="join-call" type="button">Join call</button><button class="button button-outline" id="toggle-mic" type="button" disabled>Mute mic</button><button class="button button-outline" id="toggle-camera" type="button" disabled>Turn camera off</button><button class="button button-danger" id="leave-call" type="button" disabled>Leave call</button></div>
   <p class="video-note">Your browser will ask for camera and microphone access. Calls connect directly between participants; use the browser’s permission controls if you need to revoke access.</p>
 </section>
-<script src="/socket.io/socket.io.js"></script>
+<script src="https://cdn.socket.io/4.8.4/socket.io.min.js" crossorigin="anonymous"></script>
 <script src="{{ url_for('static', filename='js/video-room.js') }}" defer></script>
 {% endblock %}
+

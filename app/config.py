@@ -15,6 +15,7 @@ class Config:
     SECRET_KEY = os.getenv("SECRET_KEY") or secrets.token_hex(32)
     SQLALCHEMY_DATABASE_URI = database_url()
     SQLALCHEMY_TRACK_MODIFICATIONS = False
+    TEMPLATES_AUTO_RELOAD = os.getenv('FLASK_ENV', 'development') != 'production'
     SQLALCHEMY_ENGINE_OPTIONS = {"pool_pre_ping": True}
     REDIS_URL = os.getenv("REDIS_URL", "redis://localhost:6379/0")
     WTF_CSRF_TIME_LIMIT = 3600
@@ -25,3 +26,4 @@ class Config:
     AI_MODEL_NAME = os.getenv("AI_MODEL_NAME", "sentence-transformers/all-MiniLM-L6-v2")
     MATCHING_USE_EMBEDDINGS = os.getenv("MATCHING_USE_EMBEDDINGS", "true").lower() == "true"
     ENABLE_DEMO_SEED = os.getenv("ENABLE_DEMO_SEED", "false").lower() == "true"
+

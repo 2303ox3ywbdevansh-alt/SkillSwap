@@ -1,6 +1,16 @@
 (() => {
   const root = document.getElementById("video-room");
-  if (!root || typeof io !== "function") return;
+  if (!root) return;
+  if (typeof io !== "function") {
+    const message = document.getElementById("call-status");
+    if (message) {
+      message.textContent = "The video call client could not load. Check your internet connection and reload this page.";
+      message.classList.add("is-error");
+    }
+    const button = document.getElementById("join-call");
+    if (button) button.disabled = true;
+    return;
+  }
 
   const sessionId = Number(root.dataset.sessionId);
   const userId = Number(root.dataset.userId);
@@ -207,4 +217,5 @@
   });
   window.addEventListener("pagehide", () => socket.emit("video:leave"));
 })();
+
 
